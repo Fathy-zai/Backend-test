@@ -7,6 +7,7 @@ import (
 	"weather-service/internal/model"
 )
 
+// TOM: Solid cache :)
 type entry struct {
 	val       model.Weather
 	createdAt time.Time

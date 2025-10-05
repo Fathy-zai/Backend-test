@@ -15,6 +15,7 @@ func main() {
 
 	httpClient := &http.Client{Timeout: cfg.HTTPTimeout}
 
+	// TOM: Minor: This could be pulled into a LoadProviders() fn and that would make it easier to test this part of the initialisation
 	var provs []providers.Provider
 	if k := os.Getenv("WEATHERSTACK_KEY"); k != "" {
 		provs = append(provs, providers.NewWeatherstack(httpClient, k))
@@ -22,8 +23,8 @@ func main() {
 	if k := os.Getenv("OPENWEATHER_KEY"); k != "" {
 		provs = append(provs, providers.NewOpenWeather(httpClient, k))
 	}
-	
 
+	// TOM: It would be nice to know which providers couldn't be loaded rather than a general message. That would make debugging easier
 	if len(provs) == 0 {
 		log.Fatal("no providers configured; set WEATHERSTACK_KEY and/or OPENWEATHER_KEY")
 	}

@@ -9,12 +9,15 @@ import (
 	"net/url"
 )
 
+// TOM: Consider extracting common logic between providers to avoid duplication
+
 type weatherstack struct {
 	cli *http.Client
 	key string
 }
 
 func NewWeatherstack(cli *http.Client, key string) Provider {
+	// TOM: Nice one on passing in the http client. That will make unit testing easier because we've injected the dependency
 	return &weatherstack{cli: cli, key: key}
 }
 

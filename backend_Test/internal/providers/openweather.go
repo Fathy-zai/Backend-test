@@ -39,7 +39,9 @@ func (o *openweather) Get(ctx context.Context, city string) (Measurement, error)
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusOK {
+		// TOM: We can probably just read the whole body
 		// read a small body for debugging
+		// TOM: Definitely need to handle the errors from ReadAll
 		b, _ := io.ReadAll(io.LimitReader(resp.Body, 1024))
 		return Measurement{}, fmt.Errorf("status %d body: %s", resp.StatusCode, string(b))
 	}

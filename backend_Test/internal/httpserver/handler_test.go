@@ -12,6 +12,8 @@ import (
 	"weather-service/internal/providers"
 )
 
+// TOM: Consider using the testify/assert library. It has lots of handy functions to handle assertions
+
 type fakeProvider struct {
 	name string
 	m    providers.Measurement
@@ -23,7 +25,7 @@ func (f fakeProvider) Get(ctx context.Context, city string) (providers.Measureme
 	return f.m, f.err
 }
 
-
+// TOM: Unsure what the purpose of this test is (it's not useless, just not sure what is supposed to be tested). Looks like it just checks that given a server with providers, the server handles the request and returns 200. The test name suggests caching is relevant in this scenario but it doesn't look like it is tested.
 func TestHandler_FreshCacheThenProvider(t *testing.T) {
 	cfg := config.Config{Port: 0, CacheTTL: 3 * time.Second, HTTPTimeout: 200 * time.Millisecond}
 	s := &server{cfg: cfg, providers: []providers.Provider{fakeProvider{"p1", providers.Measurement{TempC: 20, WindKph: 30}, nil}}}
@@ -71,6 +73,7 @@ func (t *tcache) GetFresh(key string) (model.Weather, bool) { v, ok := t.Memory[
 func (t *tcache) GetStale(key string) (model.Weather, bool) { v, ok := t.Memory[key]; return v, ok }
 func (t *tcache) Set(key string, v model.Weather)           { t.Memory[key] = v }
 
+// TOM: This is unnecessary. Go's interfaces are implictly implemented, i.e. you can get rid of the interface here since the test cache implements the methods as defined by the interface on the server
 // Ensure tcache implements the same interface as cache.Memory
 var _ interface {
 	GetFresh(string) (model.Weather, bool)
